@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LexiSync Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Space Grotesk',sans-serif;background:#0a1628;color:#e8f0fe;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem;overflow:hidden;position:relative}
+.b1{position:fixed;width:560px;height:560px;border-radius:50%;background:#1a3a8f;filter:blur(110px);opacity:.22;top:-160px;left:-140px;animation:drift 11s ease-in-out infinite alternate;pointer-events:none}
+.b2{position:fixed;width:420px;height:420px;border-radius:50%;background:#0d6efd;filter:blur(110px);opacity:.16;bottom:-120px;right:-100px;animation:drift 9s ease-in-out infinite alternate;animation-delay:-4s;pointer-events:none}
+.b3{position:fixed;width:300px;height:300px;border-radius:50%;background:#1565c0;filter:blur(100px);opacity:.14;top:50%;left:45%;animation:drift 13s ease-in-out infinite alternate;animation-delay:-7s;pointer-events:none}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(35px,-35px) scale(1.12)}}
+.noise{position:fixed;inset:0;z-index:1;opacity:.028;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px}
+.grid-lines{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.025;background-image:linear-gradient(rgba(77,163,255,.8) 1px,transparent 1px),linear-gradient(90deg,rgba(77,163,255,.8) 1px,transparent 1px);background-size:64px 64px}
+.wrap{position:relative;z-index:10;width:100%;max-width:960px;display:flex;flex-direction:column;align-items:center;gap:2.4rem}
+.top{text-align:center;animation:fadeDown .75s ease both}
+.pill{display:inline-flex;align-items:center;gap:7px;background:rgba(30,91,191,.2);border:1px solid rgba(77,163,255,.2);border-radius:100px;padding:5px 16px;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:#7ab8ff;font-family:'JetBrains Mono',monospace;margin-bottom:1.3rem}
+.dot{width:5px;height:5px;border-radius:50%;background:#4ade80;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-size:clamp(2.8rem,5.5vw,3.8rem);font-weight:700;letter-spacing:-.04em;line-height:1.05}
+.t1{color:#e8f0fe}.t2{color:#4da3ff}
+.sub{margin-top:.6rem;font-size:.9rem;color:rgba(232,240,254,.35);font-weight:300}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:translateY(0)}}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;width:100%}
+.card{background:rgba(16,36,72,.65);border:1px solid rgba(77,163,255,.13);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border-radius:20px;padding:1.9rem 1.7rem;display:flex;flex-direction:column;gap:.85rem;position:relative;overflow:hidden;cursor:pointer;transition:transform .35s cubic-bezier(.34,1.56,.64,1),border-color .3s,box-shadow .3s;text-decoration:none;color:inherit}
+.card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(77,163,255,.05) 0%,transparent 55%);opacity:0;transition:opacity .3s;border-radius:inherit}
+.card::after{content:'';position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,#4da3ff,transparent);opacity:0;transition:opacity .3s}
+.card:hover{transform:translateY(-8px) scale(1.012);border-color:rgba(77,163,255,.38);box-shadow:0 28px 56px rgba(0,0,0,.45),0 0 40px rgba(77,163,255,.07)}
+.card:hover::before,.card:hover::after{opacity:1}
+.card:nth-child(1){animation:fadeUp .6s ease .1s both}
+.card:nth-child(2){animation:fadeUp .6s ease .2s both}
+.card:nth-child(3){animation:fadeUp .6s ease .3s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.icon{width:46px;height:46px;border-radius:12px;background:rgba(30,91,191,.28);border:1px solid rgba(77,163,255,.2);display:flex;align-items:center;justify-content:center;font-size:1.05rem;color:#4da3ff;transition:transform .3s}
+.card:hover .icon{transform:rotate(-6deg) scale(1.12)}
+.tag{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(122,184,255,.3);font-family:'JetBrains Mono',monospace}
+.card h3{font-size:1.15rem;font-weight:600;letter-spacing:-.025em;color:#c8dcf8}
+.card p{font-size:.79rem;color:rgba(200,220,248,.38);line-height:1.68;flex:1}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 17px;border-radius:100px;font-size:.76rem;font-weight:500;border:1px solid rgba(77,163,255,.22);background:rgba(30,91,191,.18);color:#7ab8ff;width:fit-content;margin-top:.25rem;transition:all .2s}
+.card:hover .btn{background:rgba(30,91,191,.38);border-color:rgba(77,163,255,.48);color:#aad4ff;gap:11px}
+#open-status{font-size:.7rem;color:rgba(122,184,255,.4);min-height:14px;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;transition:color .3s}
+.foot{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,240,254,.1);font-family:'JetBrains Mono',monospace;animation:fadeUp .6s ease .5s both}
+</style>
+</head>
+<body>
+<div class="b1"></div><div class="b2"></div><div class="b3"></div>
+<div class="noise"></div><div class="grid-lines"></div>
+<div class="wrap">
+  <div class="top">
+    <div class="pill"><span class="dot"></span>system online</div>
+    <h1><span class="t1">Lexi</span><span class="t2">Sync</span> <span class="t1">Hub</span></h1>
+    <p class="sub">Gesture-powered control center</p>
+  </div>
+  <div class="grid">
+    <a href="/mouse_control" class="card">
+      <div class="icon"><i class="fas fa-mouse-pointer"></i></div>
+      <span class="tag">Module 01</span>
+      <h3>Mouse Control</h3>
+      <p>Control your cursor using hand landmarks. Point, click, and double-click with natural movements.</p>
+      <div class="btn">Launch <i class="fas fa-arrow-right" style="font-size:.62rem"></i></div>
+    </a>
+    <a href="/distant_control" class="card">
+      <div class="icon"><i class="fas fa-satellite-dish"></i></div>
+      <span class="tag">Module 02</span>
+      <h3>Distant Control</h3>
+      <p>Send gesture commands to ESP32 over Wi-Fi. Toggle appliances with an open hand or fist.</p>
+      <div class="btn">Connect <i class="fas fa-arrow-right" style="font-size:.62rem"></i></div>
+    </a>
+    <div class="card" onclick="openApp()">
+      <div class="icon"><i class="fas fa-mobile-alt"></i></div>
+      <span class="tag">Module 03</span>
+      <h3>App Settings</h3>
+      <p>Launch GestureAssist on your Android device via ADB or deep link instantly.</p>
+      <div class="btn">Open App <i class="fas fa-arrow-right" style="font-size:.62rem"></i></div>
+      <div id="open-status"></div>
+    </div>
+  </div>
+  <div class="foot">lexisync &nbsp;·&nbsp; gesture interface v2.0</div>
+</div>
+<script>
+function openApp(){
+  const s=document.getElementById('open-status');
+  s.style.color='rgba(122,184,255,.7)';s.textContent='⟳ launching…';
+  window.location.href='gestureassist://open';
+  fetch('/open_app').then(r=>r.json()).then(d=>{
+    if(d.status==='ok'){s.style.color='rgba(74,222,128,.8)';s.textContent='✓ app launched'}
+    else{s.style.color='rgba(248,113,113,.8)';s.textContent='⚠ '+(d.error||'failed')}
+    setTimeout(()=>{s.textContent=''},3500);
+  }).catch(()=>{s.style.color='rgba(248,113,113,.8)';s.textContent='⚠ server unreachable';setTimeout(()=>{s.textContent=''},3500)});
+}
+</script>
+</body>
+</html>

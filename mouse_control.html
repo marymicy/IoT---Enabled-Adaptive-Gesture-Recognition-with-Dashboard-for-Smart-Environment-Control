@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LexiSync · Mouse Control</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Space Grotesk',sans-serif;background:#0a1628;color:#e8f0fe;height:100vh;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.b1{position:fixed;width:500px;height:500px;border-radius:50%;background:#1a3a8f;filter:blur(120px);opacity:.18;top:-180px;left:-100px;pointer-events:none}
+.b2{position:fixed;width:350px;height:350px;border-radius:50%;background:#0d6efd;filter:blur(110px);opacity:.13;bottom:-100px;right:-60px;pointer-events:none}
+.noise{position:fixed;inset:0;z-index:1;opacity:.025;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px}
+.grid-lines{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.02;background-image:linear-gradient(rgba(77,163,255,.8) 1px,transparent 1px),linear-gradient(90deg,rgba(77,163,255,.8) 1px,transparent 1px);background-size:64px 64px}
+nav{position:relative;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.8rem;background:rgba(10,22,40,.8);backdrop-filter:blur(20px);border-bottom:1px solid rgba(77,163,255,.1);flex-shrink:0}
+.nav-back{display:flex;align-items:center;gap:7px;text-decoration:none;color:rgba(232,240,254,.32);font-size:.8rem;transition:color .2s;font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
+.nav-back:hover{color:#7ab8ff}
+.nav-title{font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;color:rgba(232,240,254,.6)}
+.live{display:flex;align-items:center;gap:6px;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:#4ade80;font-family:'JetBrains Mono',monospace}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.main{position:relative;z-index:10;flex:1;display:flex;align-items:center;justify-content:center;gap:1.4rem;padding:1.5rem 2rem;min-height:0}
+.video-wrap{background:rgba(8,18,36,.7);border:1px solid rgba(77,163,255,.12);border-radius:16px;overflow:hidden;position:relative;width:65%;max-width:600px;height:65%;max-height:460px;align-self:center;justify-self:center}
+.video-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.vid-tag{position:absolute;top:13px;left:13px;background:rgba(10,22,40,.75);backdrop-filter:blur(8px);border:1px solid rgba(77,163,255,.12);border-radius:7px;padding:3px 10px;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(122,184,255,.4);font-family:'JetBrains Mono',monospace}
+.sidebar{width:280px;flex-shrink:0;display:flex;flex-direction:column;gap:.9rem;overflow-y:auto;align-self:center}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(77,163,255,.15);border-radius:3px}
+.glass{background:rgba(16,36,72,.55);border:1px solid rgba(77,163,255,.1);backdrop-filter:blur(20px);border-radius:14px;padding:1.1rem}
+.sec-label{font-size:.57rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(122,184,255,.3);font-family:'JetBrains Mono',monospace;margin-bottom:.8rem;display:flex;align-items:center;gap:8px}
+.sec-label::after{content:'';flex:1;height:1px;background:rgba(77,163,255,.08)}
+.gr{display:flex;align-items:flex-start;gap:10px;padding:9px 11px;border-radius:9px;background:rgba(30,60,120,.2);border:1px solid rgba(77,163,255,.07);margin-bottom:6px;transition:background .2s}
+.gr:last-child{margin-bottom:0}
+.gr:hover{background:rgba(30,60,120,.35)}
+.gr-acc{border-left:2px solid var(--c);border-radius:0}
+.em{font-size:1.2rem;min-width:28px;text-align:center;line-height:1.1}
+.gi strong{display:block;font-size:.8rem;font-weight:500;color:#c8dcf8;margin-bottom:1px}
+.gi span{font-size:.7rem;color:rgba(200,220,248,.35);line-height:1.5}
+.tip-text{font-size:.76rem;color:rgba(200,220,248,.35);line-height:1.75}
+.tip-text b{color:rgba(200,220,248,.62);font-weight:500}
+</style>
+</head>
+<body onload="fetch('/set_mode/mouse')">
+<div class="b1"></div><div class="b2"></div>
+<div class="noise"></div><div class="grid-lines"></div>
+<nav>
+  <a href="/" class="nav-back"><i class="fas fa-chevron-left" style="font-size:.68rem"></i>&nbsp;hub</a>
+  <span class="nav-title">Mouse Control</span>
+  <span class="live"><span class="live-dot"></span>live</span>
+</nav>
+<div class="main">
+  <div class="video-wrap">
+    <span class="vid-tag">camera feed</span>
+    <img src="/video_feed" alt="Camera Feed">
+  </div>
+  <div class="sidebar">
+    <div class="glass">
+      <div class="sec-label">Gesture map</div>
+      <div class="gr gr-acc" style="--c:#4da3ff"><span class="em">☝️</span><div class="gi"><strong>Move Cursor</strong><span>Index finger up, others curled</span></div></div>
+      <div class="gr gr-acc" style="--c:#60a5fa"><span class="em">✌️</span><div class="gi"><strong>Single Click</strong><span>Index & middle fingers up</span></div></div>
+      <div class="gr gr-acc" style="--c:#93c5fd"><span class="em">🤟</span><div class="gi"><strong>Double Click</strong><span>Three fingers extended</span></div></div>
+      <div class="gr gr-acc" style="--c:#fbbf24"><span class="em">🖐️</span><div class="gi"><strong>Brightness Max</strong><span>All five fingers open</span></div></div>
+      <div class="gr gr-acc" style="--c:#f87171"><span class="em">✊</span><div class="gi"><strong>Brightness Off</strong><span>Closed fist</span></div></div>
+    </div>
+    <div class="glass">
+      <div class="sec-label">Tips</div>
+      <p class="tip-text">Keep hand <b>20–50 cm</b> from camera.<br>Good lighting improves accuracy.<br>Move <b>slowly</b> for precise control.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
